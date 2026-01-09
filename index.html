@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sobha | Property Finder</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar__left">
+      <!-- Put your logo file here: dc-web-demo/assets/brand/sobha-logo.svg -->
+      <img class="brandmark" src="./assets/brand/sobha-logo.svg" alt="Sobha Realty" />
+    </div>
+    <div class="topbar__right">
+      <span class="ws-pill" id="wsStatus">Connecting…</span>
+      <span class="step-pill" id="stepPill">Step 1 of 7</span>
+    </div>
+  </header>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <main class="shell">
+    <!-- STEP 1: WELCOME / CONSENT -->
+    <section class="step is-active" data-step="1">
+      <div class="hero">
+        <div class="hero__copy">
+          <p class="eyebrow">Welcome</p>
+          <h1>Find your next home</h1>
+          <p class="sub">A quick selection flow to match you with the right Sobha property.</p>
+
+          <div class="consent-card">
+            <label class="checkbox">
+              <input type="checkbox" id="consentCheck" />
+              <span>I agree to share my selections for a tailored property recommendation experience.</span>
+            </label>
+
+            <div class="actions">
+              <button class="btn btn-primary" id="btnConsentContinue" disabled>Start</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__media">
+          <!-- Optional hero image: dc-web-demo/assets/brand/hero.jpg -->
+          <img class="hero__img" src="./assets/brand/hero.jpg" alt="Sobha" onerror="this.style.display='none'" />
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: LOCATION (auto-advance on click) -->
+    <section class="step" data-step="2">
+      <div class="stephead">
+        <p class="eyebrow">Location</p>
+        <h2>Please choose your desired location</h2>
+        <p class="muted">Tap one option.</p>
+      </div>
+
+      <div class="grid" id="locationGrid">
+        <button class="tile" data-type="location" data-value="Sobha Hartland" data-image="./assets/locations/hartland.jpg">
+          <img src="./assets/locations/hartland.jpg" alt="Sobha Hartland" />
+          <div class="tile__meta">
+            <div class="tile__title">Sobha Hartland</div>
+            <div class="tile__sub">Dubai · Waterfront community</div>
+          </div>
+        </button>
+
+        <button class="tile" data-type="location" data-value="Sobha Central" data-image="./assets/locations/sobha-central.jpg">
+          <img src="./assets/locations/sobha-central.jpg" alt="Sobha Central" />
+          <div class="tile__meta">
+            <div class="tile__title">Sobha Central</div>
+            <div class="tile__sub">City living · Connected</div>
+          </div>
+        </button>
+
+        <button class="tile" data-type="location" data-value="Sobha Solis" data-image="./assets/locations/sobha-solis.jpg">
+          <img src="./assets/locations/sobha-solis.jpg" alt="Sobha Solis" />
+          <div class="tile__meta">
+            <div class="tile__title">Sobha Solis</div>
+            <div class="tile__sub">Modern · Lifestyle-first</div>
+          </div>
+        </button>
+
+        <button class="tile" data-type="location" data-value="Sobha One" data-image="./assets/locations/sobha-one.jpg">
+          <img src="./assets/locations/sobha-one.jpg" alt="Sobha One" />
+          <div class="tile__meta">
+            <div class="tile__title">Sobha One</div>
+            <div class="tile__sub">Premium · Iconic</div>
+          </div>
+        </button>
+
+        <button class="tile" data-type="location" data-value="Seahaven" data-image="./assets/locations/seahaven.jpg">
+          <img src="./assets/locations/seahaven.jpg" alt="Seahaven" />
+          <div class="tile__meta">
+            <div class="tile__title">Seahaven</div>
+            <div class="tile__sub">Sea views · Marina vibe</div>
+          </div>
+        </button>
+
+        <button class="tile" data-type="location" data-value="Reserve Villas" data-image="./assets/locations/reserve-villas.jpg">
+          <img src="./assets/locations/reserve-villas.jpg" alt="Reserve Villas" />
+          <div class="tile__meta">
+            <div class="tile__title">Reserve Villas</div>
+            <div class="tile__sub">Private · Spacious</div>
+          </div>
+        </button>
+
+        <button class="tile" data-type="location" data-value="Riverside Crescent" data-image="./assets/locations/riverside-crescent.jpg">
+          <img src="./assets/locations/riverside-crescent.jpg" alt="Riverside Crescent" />
+          <div class="tile__meta">
+            <div class="tile__title">Riverside Crescent</div>
+            <div class="tile__sub">Green · Waterfront</div>
+          </div>
+        </button>
+
+        <button class="tile" data-type="location" data-value="Sobha AquaCrest" data-image="./assets/locations/aquacrest.jpg">
+          <img src="./assets/locations/aquacrest.jpg" alt="Sobha AquaCrest" />
+          <div class="tile__meta">
+            <div class="tile__title">Sobha AquaCrest</div>
+            <div class="tile__sub">Resort feel · Calm</div>
+          </div>
+        </button>
+
+        <button class="tile" data-type="location" data-value="Sobha Siniya Island" data-image="./assets/locations/sinya-island.jpg">
+          <img src="./assets/locations/sinya-island.jpg" alt="Sobha Siniya Island" />
+          <div class="tile__meta">
+            <div class="tile__title">Sobha Siniya Island</div>
+            <div class="tile__sub">Island living · Exclusive</div>
+          </div>
+        </button>
+      </div>
+
+      <div class="nav">
+        <button class="btn btn-ghost" data-back>Back</button>
+      </div>
+    </section>
+
+    <!-- STEP 3: BUDGET -->
+    <section class="step" data-step="3">
+      <div class="stephead">
+        <p class="eyebrow">Budget</p>
+        <h2>Select your budget</h2>
+        <p class="muted">Use the slider to adjust.</p>
+      </div>
+
+      <div class="card">
+        <div class="card__row">
+          <div>
+            <div class="label">Budget (AED)</div>
+            <div class="value" id="budgetValue">AED 5,000,000</div>
+          </div>
+          <div class="badge" id="budgetBadge">Premium</div>
+        </div>
+
+        <input
+          type="range"
+          id="budgetRange"
+          min="500000"
+          max="25000000"
+          step="250000"
+          value="5000000"
+        />
+
+        <div class="range-labels">
+          <span>AED 500k</span>
+          <span>AED 25m</span>
+        </div>
+      </div>
+
+      <div class="nav">
+        <button class="btn btn-ghost" data-back>Back</button>
+        <button class="btn btn-primary" data-next>Continue</button>
+      </div>
+    </section>
+
+    <!-- STEP 4: BEDROOMS (auto-advance) -->
+    <section class="step" data-step="4">
+      <div class="stephead">
+        <p class="eyebrow">Bedrooms</p>
+        <h2>How many bedrooms?</h2>
+        <p class="muted">Tap one option.</p>
+      </div>
+
+      <div class="chips">
+        <button class="chip" data-type="bedrooms" data-value="Studio">Studio</button>
+        <button class="chip" data-type="bedrooms" data-value="1">1</button>
+        <button class="chip" data-type="bedrooms" data-value="2">2</button>
+        <button class="chip" data-type="bedrooms" data-value="3">3</button>
+        <button class="chip" data-type="bedrooms" data-value="4+">4+</button>
+      </div>
+
+      <div class="nav">
+        <button class="btn btn-ghost" data-back>Back</button>
+      </div>
+    </section>
+
+    <!-- STEP 5: PROPERTY TYPE (auto-advance) -->
+    <section class="step" data-step="5">
+      <div class="stephead">
+        <p class="eyebrow">Property Type</p>
+        <h2>Choose your property type</h2>
+        <p class="muted">Tap one option.</p>
+      </div>
+
+      <div class="grid">
+        <button class="tile tile--small" data-type="propertyType" data-value="Apartment" data-image="./assets/types/apartment.jpg">
+          <img src="./assets/types/apartment.jpg" alt="Apartment" />
+          <div class="tile__meta">
+            <div class="tile__title">Apartment</div>
+          </div>
+        </button>
+
+        <button class="tile tile--small" data-type="propertyType" data-value="Villa" data-image="./assets/types/villa.jpg">
+          <img src="./assets/types/villa.jpg" alt="Villa" />
+          <div class="tile__meta">
+            <div class="tile__title">Villa</div>
+          </div>
+        </button>
+
+        <button class="tile tile--small" data-type="propertyType" data-value="Townhouse" data-image="./assets/types/townhouse.jpg">
+          <img src="./assets/types/townhouse.jpg" alt="Townhouse" />
+          <div class="tile__meta">
+            <div class="tile__title">Townhouse</div>
+          </div>
+        </button>
+
+        <button class="tile tile--small" data-type="propertyType" data-value="Duplex" data-image="./assets/types/duplex.jpg">
+          <img src="./assets/types/duplex.jpg" alt="Duplex" />
+          <div class="tile__meta">
+            <div class="tile__title">Duplex</div>
+          </div>
+        </button>
+
+        <button class="tile tile--small" data-type="propertyType" data-value="Penthouse" data-image="./assets/types/penthouse.jpg">
+          <img src="./assets/types/penthouse.jpg" alt="Penthouse" />
+          <div class="tile__meta">
+            <div class="tile__title">Penthouse</div>
+          </div>
+        </button>
+      </div>
+
+      <div class="nav">
+        <button class="btn btn-ghost" data-back>Back</button>
+      </div>
+    </section>
+
+    <!-- STEP 6: REGISTER -->
+    <section class="step" data-step="6">
+      <div class="stephead">
+        <p class="eyebrow">Register</p>
+        <h2>Get your shortlist</h2>
+        <p class="muted">Enter your details to receive tailored options.</p>
+      </div>
+
+      <div class="form card">
+        <div class="field">
+          <label>Full name</label>
+          <input id="fullName" type="text" placeholder="e.g., Ahmed Mansoori" />
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input id="email" type="email" placeholder="e.g., ahmed@email.com" />
+        </div>
+
+        <div class="field">
+          <label>Phone (optional)</label>
+          <input id="phone" type="tel" placeholder="e.g., +971…" />
+        </div>
+      </div>
+
+      <div class="nav">
+        <button class="btn btn-ghost" data-back>Back</button>
+        <button class="btn btn-primary" id="btnRegister">Submit</button>
+      </div>
+    </section>
+
+    <!-- STEP 7: DONE -->
+    <section class="step" data-step="7">
+      <div class="stephead">
+        <p class="eyebrow">Complete</p>
+        <h2>Thank you</h2>
+        <p class="muted">Your preferences have been saved. A Sobha specialist will follow up shortly.</p>
+      </div>
+
+      <div class="nav">
+        <button class="btn btn-ghost" id="btnRestart">Start over</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
