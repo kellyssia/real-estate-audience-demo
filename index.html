@@ -1,299 +1,336 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sobha | Property Finder</title>
-  <link rel="stylesheet" href="./styles.css" />
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real Estate Audience</title>
 
-<body>
-  <!-- Top bar -->
-  <header class="topbar">
-    <div class="topbar__left">
-      <!-- Put your logo file here: dc-web-demo/assets/brand/sobha-logo.svg -->
-      <img class="brandmark" src="./assets/brand/sobha-logo.svg" alt="Sobha Realty" />
-    </div>
-    <div class="topbar__right">
-      <span class="ws-pill" id="wsStatus">Connecting…</span>
-      <span class="step-pill" id="stepPill">Step 1 of 7</span>
-    </div>
-  </header>
+    <style>
+      :root {
+        --bg: #0b1220;
+        --card: rgba(255, 255, 255, 0.06);
+        --card2: rgba(255, 255, 255, 0.09);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.68);
+        --border: rgba(255, 255, 255, 0.14);
+        --accent: #7c3aed;
+      }
 
-  <!-- Progress -->
-  <div class="progress-wrap">
-    <div class="progress-bar" id="progressBar"></div>
-  </div>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: radial-gradient(1200px 600px at 20% 10%, rgba(124,58,237,0.25), transparent 50%),
+                    radial-gradient(900px 500px at 80% 20%, rgba(59,130,246,0.20), transparent 55%),
+                    var(--bg);
+        color: var(--text);
+      }
 
-  <main class="shell">
-    <!-- STEP 1: WELCOME / CONSENT -->
-    <section class="step is-active" data-step="1">
-      <div class="hero">
-        <div class="hero__copy">
-          <p class="eyebrow">Welcome</p>
-          <h1>Find your next home</h1>
-          <p class="sub">A quick selection flow to match you with the right Sobha property.</p>
+      header {
+        padding: 20px 18px 10px;
+        border-bottom: 1px solid var(--border);
+        backdrop-filter: blur(8px);
+      }
 
-          <div class="consent-card">
-            <label class="checkbox">
-              <input type="checkbox" id="consentCheck" />
-              <span>I agree to share my selections for a tailored property recommendation experience.</span>
-            </label>
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 14px;
+      }
 
-            <div class="actions">
-              <button class="btn btn-primary" id="btnConsentContinue" disabled>Start</button>
-            </div>
-          </div>
-        </div>
+      h1 {
+        margin: 0;
+        font-size: 18px;
+        letter-spacing: 0.2px;
+      }
 
-        <div class="hero__media">
-          <!-- Optional hero image: dc-web-demo/assets/brand/hero.jpg -->
-          <img class="hero__img" src="./assets/brand/hero.jpg" alt="Sobha" onerror="this.style.display='none'" />
-        </div>
-      </div>
-    </section>
+      .sub {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
 
-    <!-- STEP 2: LOCATION (auto-advance on click) -->
-    <section class="step" data-step="2">
-      <div class="stephead">
-        <p class="eyebrow">Location</p>
-        <h2>Please choose your desired location</h2>
-        <p class="muted">Tap one option.</p>
-      </div>
+      .statusbar {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
 
-      <div class="grid" id="locationGrid">
-        <button class="tile" data-type="location" data-value="Sobha Hartland" data-image="./assets/locations/hartland.jpg">
-          <img src="./assets/locations/hartland.jpg" alt="Sobha Hartland" />
-          <div class="tile__meta">
-            <div class="tile__title">Sobha Hartland</div>
-            <div class="tile__sub">Dubai · Waterfront community</div>
-          </div>
-        </button>
+      .pill {
+        padding: 8px 10px;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.05);
+        border-radius: 999px;
+        font-size: 12px;
+        color: var(--muted);
+      }
 
-        <button class="tile" data-type="location" data-value="Sobha Central" data-image="./assets/locations/sobha-central.jpg">
-          <img src="./assets/locations/sobha-central.jpg" alt="Sobha Central" />
-          <div class="tile__meta">
-            <div class="tile__title">Sobha Central</div>
-            <div class="tile__sub">City living · Connected</div>
-          </div>
-        </button>
+      main {
+        padding: 18px 0 40px;
+      }
 
-        <button class="tile" data-type="location" data-value="Sobha Solis" data-image="./assets/locations/sobha-solis.jpg">
-          <img src="./assets/locations/sobha-solis.jpg" alt="Sobha Solis" />
-          <div class="tile__meta">
-            <div class="tile__title">Sobha Solis</div>
-            <div class="tile__sub">Modern · Lifestyle-first</div>
-          </div>
-        </button>
+      .panel {
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.04);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-top: 14px;
+      }
 
-        <button class="tile" data-type="location" data-value="Sobha One" data-image="./assets/locations/sobha-one.jpg">
-          <img src="./assets/locations/sobha-one.jpg" alt="Sobha One" />
-          <div class="tile__meta">
-            <div class="tile__title">Sobha One</div>
-            <div class="tile__sub">Premium · Iconic</div>
-          </div>
-        </button>
+      .panelHead {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 14px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(255,255,255,0.03);
+      }
 
-        <button class="tile" data-type="location" data-value="Seahaven" data-image="./assets/locations/seahaven.jpg">
-          <img src="./assets/locations/seahaven.jpg" alt="Seahaven" />
-          <div class="tile__meta">
-            <div class="tile__title">Seahaven</div>
-            <div class="tile__sub">Sea views · Marina vibe</div>
-          </div>
-        </button>
+      .panelHead strong {
+        font-size: 14px;
+      }
 
-        <button class="tile" data-type="location" data-value="Reserve Villas" data-image="./assets/locations/reserve-villas.jpg">
-          <img src="./assets/locations/reserve-villas.jpg" alt="Reserve Villas" />
-          <div class="tile__meta">
-            <div class="tile__title">Reserve Villas</div>
-            <div class="tile__sub">Private · Spacious</div>
-          </div>
-        </button>
+      .grid {
+        display: grid;
+        gap: 12px;
+        padding: 14px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
 
-        <button class="tile" data-type="location" data-value="Riverside Crescent" data-image="./assets/locations/riverside-crescent.jpg">
-          <img src="./assets/locations/riverside-crescent.jpg" alt="Riverside Crescent" />
-          <div class="tile__meta">
-            <div class="tile__title">Riverside Crescent</div>
-            <div class="tile__sub">Green · Waterfront</div>
-          </div>
-        </button>
+      @media (max-width: 980px) {
+        .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 520px) {
+        .grid { grid-template-columns: 1fr; }
+      }
 
-        <button class="tile" data-type="location" data-value="Sobha AquaCrest" data-image="./assets/locations/aquacrest.jpg">
-          <img src="./assets/locations/aquacrest.jpg" alt="Sobha AquaCrest" />
-          <div class="tile__meta">
-            <div class="tile__title">Sobha AquaCrest</div>
-            <div class="tile__sub">Resort feel · Calm</div>
-          </div>
-        </button>
+      .tile {
+        border: 1px solid var(--border);
+        background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.03));
+        border-radius: 16px;
+        overflow: hidden;
+        cursor: pointer;
+        padding: 0;
+        text-align: left;
+        color: var(--text);
+        transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+      }
 
-        <button class="tile" data-type="location" data-value="Sobha Siniya Island" data-image="./assets/locations/sinya-island.jpg">
-          <img src="./assets/locations/sinya-island.jpg" alt="Sobha Siniya Island" />
-          <div class="tile__meta">
-            <div class="tile__title">Sobha Siniya Island</div>
-            <div class="tile__sub">Island living · Exclusive</div>
-          </div>
-        </button>
-      </div>
+      .tile:hover {
+        transform: translateY(-2px);
+        border-color: rgba(124,58,237,0.55);
+        background: linear-gradient(180deg, var(--card2), rgba(255,255,255,0.03));
+      }
 
-      <div class="nav">
-        <button class="btn btn-ghost" data-back>Back</button>
-      </div>
-    </section>
+      .thumb {
+        height: 120px;
+        background: rgba(255,255,255,0.06);
+        display: block;
+        width: 100%;
+        object-fit: cover;
+      }
 
-    <!-- STEP 3: BUDGET -->
-    <section class="step" data-step="3">
-      <div class="stephead">
-        <p class="eyebrow">Budget</p>
-        <h2>Select your budget</h2>
-        <p class="muted">Use the slider to adjust.</p>
-      </div>
+      .tileBody {
+        padding: 12px 12px 14px;
+      }
 
-      <div class="card">
-        <div class="card__row">
-          <div>
-            <div class="label">Budget (AED)</div>
-            <div class="value" id="budgetValue">AED 5,000,000</div>
-          </div>
-          <div class="badge" id="budgetBadge">Premium</div>
-        </div>
+      .tileTitle {
+        font-weight: 700;
+        font-size: 14px;
+        margin: 0 0 6px;
+      }
 
-        <input
-          type="range"
-          id="budgetRange"
-          min="500000"
-          max="25000000"
-          step="250000"
-          value="5000000"
-        />
+      .tileMeta {
+        margin: 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
 
-        <div class="range-labels">
-          <span>AED 500k</span>
-          <span>AED 25m</span>
-        </div>
-      </div>
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.65);
+        border: 1px solid rgba(255,255,255,0.18);
+        color: rgba(255,255,255,0.92);
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 180ms ease;
+        max-width: 92vw;
+        text-align: center;
+      }
+      .toast.show { opacity: 1; }
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 12px;
+        padding: 2px 6px;
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 8px;
+        background: rgba(255,255,255,0.06);
+      }
+    </style>
+  </head>
 
-      <div class="nav">
-        <button class="btn btn-ghost" data-back>Back</button>
-        <button class="btn btn-primary" data-next>Continue</button>
-      </div>
-    </section>
-
-    <!-- STEP 4: BEDROOMS (auto-advance) -->
-    <section class="step" data-step="4">
-      <div class="stephead">
-        <p class="eyebrow">Bedrooms</p>
-        <h2>How many bedrooms?</h2>
-        <p class="muted">Tap one option.</p>
-      </div>
-
-      <div class="chips">
-        <button class="chip" data-type="bedrooms" data-value="Studio">Studio</button>
-        <button class="chip" data-type="bedrooms" data-value="1">1</button>
-        <button class="chip" data-type="bedrooms" data-value="2">2</button>
-        <button class="chip" data-type="bedrooms" data-value="3">3</button>
-        <button class="chip" data-type="bedrooms" data-value="4+">4+</button>
-      </div>
-
-      <div class="nav">
-        <button class="btn btn-ghost" data-back>Back</button>
-      </div>
-    </section>
-
-    <!-- STEP 5: PROPERTY TYPE (auto-advance) -->
-    <section class="step" data-step="5">
-      <div class="stephead">
-        <p class="eyebrow">Property Type</p>
-        <h2>Choose your property type</h2>
-        <p class="muted">Tap one option.</p>
-      </div>
-
-      <div class="grid">
-        <button class="tile tile--small" data-type="propertyType" data-value="Apartment" data-image="./assets/types/apartment.jpg">
-          <img src="./assets/types/apartment.jpg" alt="Apartment" />
-          <div class="tile__meta">
-            <div class="tile__title">Apartment</div>
-          </div>
-        </button>
-
-        <button class="tile tile--small" data-type="propertyType" data-value="Villa" data-image="./assets/types/villa.jpg">
-          <img src="./assets/types/villa.jpg" alt="Villa" />
-          <div class="tile__meta">
-            <div class="tile__title">Villa</div>
-          </div>
-        </button>
-
-        <button class="tile tile--small" data-type="propertyType" data-value="Townhouse" data-image="./assets/types/townhouse.jpg">
-          <img src="./assets/types/townhouse.jpg" alt="Townhouse" />
-          <div class="tile__meta">
-            <div class="tile__title">Townhouse</div>
-          </div>
-        </button>
-
-        <button class="tile tile--small" data-type="propertyType" data-value="Duplex" data-image="./assets/types/duplex.jpg">
-          <img src="./assets/types/duplex.jpg" alt="Duplex" />
-          <div class="tile__meta">
-            <div class="tile__title">Duplex</div>
-          </div>
-        </button>
-
-        <button class="tile tile--small" data-type="propertyType" data-value="Penthouse" data-image="./assets/types/penthouse.jpg">
-          <img src="./assets/types/penthouse.jpg" alt="Penthouse" />
-          <div class="tile__meta">
-            <div class="tile__title">Penthouse</div>
-          </div>
-        </button>
-      </div>
-
-      <div class="nav">
-        <button class="btn btn-ghost" data-back>Back</button>
-      </div>
-    </section>
-
-    <!-- STEP 6: REGISTER -->
-    <section class="step" data-step="6">
-      <div class="stephead">
-        <p class="eyebrow">Register</p>
-        <h2>Get your shortlist</h2>
-        <p class="muted">Enter your details to receive tailored options.</p>
-      </div>
-
-      <div class="form card">
-        <div class="field">
-          <label>Full name</label>
-          <input id="fullName" type="text" placeholder="e.g., Ahmed Mansoori" />
-        </div>
-
-        <div class="field">
-          <label>Email</label>
-          <input id="email" type="email" placeholder="e.g., ahmed@email.com" />
-        </div>
-
-        <div class="field">
-          <label>Phone (optional)</label>
-          <input id="phone" type="tel" placeholder="e.g., +971…" />
+  <body>
+    <header>
+      <div class="wrap">
+        <h1>Real Estate Audience</h1>
+        <p class="sub">
+          Tap a tile to send a real-time selection event to the relay.
+          Verify the WebSocket in DevTools → Network → <span class="kbd">WS</span>.
+        </p>
+        <div class="statusbar">
+          <div class="pill" id="wsStatus">WS: connecting…</div>
+          <div class="pill" id="relayUrl">Relay: (not set)</div>
         </div>
       </div>
+    </header>
 
-      <div class="nav">
-        <button class="btn btn-ghost" data-back>Back</button>
-        <button class="btn btn-primary" id="btnRegister">Submit</button>
+    <main>
+      <div class="wrap">
+        <div class="panel">
+          <div class="panelHead">
+            <strong>Step: Location</strong>
+            <span class="pill">Click any tile</span>
+          </div>
+
+          <div class="grid">
+            <!-- ✅ This tile matches your exact JSON example -->
+            <button
+              class="tile"
+              type="button"
+              data-ws-event="selection"
+              data-step="location"
+              data-choice-key="sobha-hartland"
+              data-choice-label="Sobha Hartland"
+              data-choice-image="/assets/locations/sobha-hartland.jpg"
+            >
+              <img class="thumb" src="/assets/locations/sobha-hartland.jpg" alt="Sobha Hartland" />
+              <div class="tileBody">
+                <p class="tileTitle">Sobha Hartland</p>
+                <p class="tileMeta">Waterfront • Connected living</p>
+              </div>
+            </button>
+
+            <!-- Extra tiles (safe to delete) -->
+            <button
+              class="tile"
+              type="button"
+              data-ws-event="selection"
+              data-step="location"
+              data-choice-key="dubai-marina"
+              data-choice-label="Dubai Marina"
+              data-choice-image="/assets/locations/dubai-marina.jpg"
+            >
+              <img class="thumb" src="/assets/locations/dubai-marina.jpg" alt="Dubai Marina" />
+              <div class="tileBody">
+                <p class="tileTitle">Dubai Marina</p>
+                <p class="tileMeta">Lifestyle • Views</p>
+              </div>
+            </button>
+
+            <button
+              class="tile"
+              type="button"
+              data-ws-event="selection"
+              data-step="location"
+              data-choice-key="downtown-dubai"
+              data-choice-label="Downtown Dubai"
+              data-choice-image="/assets/locations/downtown-dubai.jpg"
+            >
+              <img class="thumb" src="/assets/locations/downtown-dubai.jpg" alt="Downtown Dubai" />
+              <div class="tileBody">
+                <p class="tileTitle">Downtown Dubai</p>
+                <p class="tileMeta">Iconic • Central</p>
+              </div>
+            </button>
+
+            <button
+              class="tile"
+              type="button"
+              data-ws-event="selection"
+              data-step="location"
+              data-choice-key="palm-jumeirah"
+              data-choice-label="Palm Jumeirah"
+              data-choice-image="/assets/locations/palm-jumeirah.jpg"
+            >
+              <img class="thumb" src="/assets/locations/palm-jumeirah.jpg" alt="Palm Jumeirah" />
+              <div class="tileBody">
+                <p class="tileTitle">Palm Jumeirah</p>
+                <p class="tileMeta">Luxury • Beach</p>
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
-    </section>
+    </main>
 
-    <!-- STEP 7: DONE -->
-    <section class="step" data-step="7">
-      <div class="stephead">
-        <p class="eyebrow">Complete</p>
-        <h2>Thank you</h2>
-        <p class="muted">Your preferences have been saved. A Sobha specialist will follow up shortly.</p>
-      </div>
+    <div class="toast" id="toast"></div>
 
-      <div class="nav">
-        <button class="btn btn-ghost" id="btnRestart">Start over</button>
-      </div>
-    </section>
-  </main>
+    <!-- ✅ SET YOUR RELAY URL HERE -->
+    <script>
+      // IMPORTANT: Replace with your actual deployed relay URL
+      // Example: window.__RELAY_WSS_URL__ = "wss://real-estate-live-demo.onrender.com";
+      window.__RELAY_WSS_URL__ = "wss://YOUR-RELAY-HOST.onrender.com";
+    </script>
 
-  <script src="./script.js"></script>
-</body>
+    <!-- ✅ Load the WS client -->
+    <script src="/ws-client.js"></script>
+
+    <!-- ✅ Click handler that sends selection events -->
+    <script>
+      const toastEl = document.getElementById("toast");
+      const wsStatusEl = document.getElementById("wsStatus");
+      const relayUrlEl = document.getElementById("relayUrl");
+
+      function toast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add("show");
+        setTimeout(() => toastEl.classList.remove("show"), 1400);
+      }
+
+      function refreshStatus() {
+        const st = window.RealEstateWS?.status?.();
+        if (!st) return;
+
+        relayUrlEl.textContent = "Relay: " + st.url;
+
+        // WebSocket readyState:
+        // 0 CONNECTING, 1 OPEN, 2 CLOSING, 3 CLOSED
+        const rs = st.readyState;
+        const label =
+          rs === 0 ? "connecting…" :
+          rs === 1 ? "OPEN ✅" :
+          rs === 2 ? "closing…" :
+          rs === 3 ? "CLOSED ❌" : String(rs);
+
+        wsStatusEl.textContent = "WS: " + label;
+      }
+
+      setInterval(refreshStatus, 600);
+      refreshStatus();
+
+      document.addEventListener("click", (e) => {
+        const tile = e.target.closest("[data-ws-event]");
+        if (!tile) return;
+
+        const payload = {
+          eventType: tile.dataset.wsEvent,
+          step: tile.dataset.step,
+          choiceKey: tile.dataset.choiceKey,
+          choiceLabel: tile.dataset.choiceLabel,
+          choiceImage: tile.dataset.choiceImage,
+        };
+
+        const sent = window.RealEstateWS?.sendSelection?.(payload);
+        if (sent) toast(`Sent: ${payload.choiceLabel}`);
+        else toast("WS not connected yet");
+      });
+    </script>
+  </body>
 </html>
