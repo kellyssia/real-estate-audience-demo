@@ -1,50 +1,70 @@
-/* ---------- Fonts (use your local ./fonts/*.woff2) --------- */
-@font-face{
+/* ===========================
+   Sobha Typography (LOCAL)
+   =========================== */
+
+/* Chronicle Display – Headings */
+@font-face {
+  font-family: "ChronicleDisplay";
+  src: url("./fonts/ChronicleDisplay-XLight.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
   font-family: "ChronicleDisplay";
   src: url("./fonts/ChronicleDisplay-Light.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
-@font-face{
-  font-family: "ChronicleDisplay";
-  src: url("./fonts/ChronicleDisplay-Regular.woff2") format("woff2");
+
+/* Ringside – Body / UI */
+@font-face {
+  font-family: "Ringside";
+  src: url("./fonts/RingsideRegular-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ringside";
+  src: url("./fonts/RingsideRegular-Book.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
-@font-face{
-  font-family: "Satoshi";
-  src: url("./fonts/Satoshi-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face{
-  font-family: "Satoshi";
-  src: url("./fonts/Satoshi-Medium.woff2") format("woff2");
+@font-face {
+  font-family: "Ringside";
+  src: url("./fonts/RingsideRegular-Med.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
-@font-face{
-  font-family: "Satoshi";
-  src: url("./fonts/Satoshi-Bold.woff2") format("woff2");
+@font-face {
+  font-family: "Ringside";
+  src: url("./fonts/RingsideRegular-Semi.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ringside";
+  src: url("./fonts/RingsideRegular-Ultra.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
-@font-face{
-  font-family: "Satoshi";
-  src: url("./fonts/Satoshi-Black.woff2") format("woff2");
-  font-weight: 900;
+@font-face {
+  font-family: "Ringside";
+  src: url("./fonts/RingsideRegular-Ultratal.woff2") format("woff2");
+  font-weight: 800;
   font-style: normal;
   font-display: swap;
 }
 
-/* ---------------------------
+/* ===========================
    Theme
----------------------------- */
+   =========================== */
 :root{
   --bg: #ffffff;
   --ink: #0b1020;
@@ -62,19 +82,18 @@
 }
 
 *{ box-sizing:border-box; }
-
 html, body{ height: 100%; }
 
 body{
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Satoshi", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  font-family: "Ringside", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* ---------------------------
+/* ===========================
    Header
----------------------------- */
+   =========================== */
 .topbar{
   position: sticky;
   top: 0;
@@ -115,9 +134,7 @@ body{
   color: rgba(11,16,32,.70);
 }
 
-.pill-outline{
-  background: transparent;
-}
+.pill-outline{ background: transparent; }
 
 .pill.is-ok{
   border-color: rgba(34,197,94,.35);
@@ -131,9 +148,9 @@ body{
   color: rgba(185,28,28,.95);
 }
 
-/* ---------------------------
+/* ===========================
    Layout
----------------------------- */
+   =========================== */
 .shell{
   max-width: 1040px;
   margin: 0 auto;
@@ -160,6 +177,7 @@ body{
   font-size: 30px;
   line-height: 1.1;
   font-family: "ChronicleDisplay", serif;
+  font-weight: 300;
 }
 
 .muted{
@@ -167,9 +185,9 @@ body{
   color: var(--muted);
 }
 
-/* ---------------------------
+/* ===========================
    Hero
----------------------------- */
+   =========================== */
 .hero{
   display: grid;
   grid-template-columns: 1.1fr .9fr;
@@ -190,6 +208,7 @@ body{
   font-size: 38px;
   letter-spacing: -.02em;
   font-family: "ChronicleDisplay", serif;
+  font-weight: 300;
 }
 
 .hero__copy .sub{
@@ -226,18 +245,16 @@ body{
   color: rgba(11,16,32,.78);
 }
 
-.checkbox input{
-  margin-top: 3px;
-}
+.checkbox input{ margin-top: 3px; }
 
 .actions{
   margin-top: 12px;
   display: flex;
 }
 
-/* ---------------------------
+/* ===========================
    Cards / Controls
----------------------------- */
+   =========================== */
 .card{
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -264,7 +281,7 @@ body{
 
 .value{
   font-size: 22px;
-  font-weight: 900;
+  font-weight: 800;
   letter-spacing: -.02em;
 }
 
@@ -289,7 +306,9 @@ body{
   font-weight: 700;
 }
 
-/* Grid + Tiles */
+/* ===========================
+   Grid + Tiles
+   =========================== */
 .grid{
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -340,11 +359,11 @@ body{
   box-shadow: 0 0 0 3px rgba(199,164,90,.18);
 }
 
-.tile--small img{
-  height: 130px;
-}
+.tile--small img{ height: 130px; }
 
-/* Chips */
+/* ===========================
+   Chips
+   =========================== */
 .chips{
   display: flex;
   flex-wrap: wrap;
@@ -372,10 +391,10 @@ body{
   box-shadow: 0 0 0 3px rgba(199,164,90,.18);
 }
 
-/* Form */
-.form{
-  padding: 18px;
-}
+/* ===========================
+   Form
+   =========================== */
+.form{ padding: 18px; }
 
 .field{
   display: flex;
@@ -399,7 +418,7 @@ body{
   padding: 10px 12px;
   font-size: 15px;
   outline: none;
-  font-family: "Satoshi", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  font-family: "Ringside", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
 
 .field input:focus{
@@ -407,7 +426,9 @@ body{
   box-shadow: 0 0 0 3px rgba(199,164,90,.18);
 }
 
-/* Nav / Buttons */
+/* ===========================
+   Nav / Buttons
+   =========================== */
 .nav{
   margin-top: 16px;
   display: flex;
@@ -423,7 +444,7 @@ body{
   padding: 0 16px;
   font-weight: 800;
   cursor: pointer;
-  font-family: "Satoshi", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  font-family: "Ringside", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
 
 .btn:disabled{
@@ -436,11 +457,11 @@ body{
   background: linear-gradient(180deg, rgba(199,164,90,.20), rgba(199,164,90,.08));
 }
 
-.btn-ghost{
-  background: transparent;
-}
+.btn-ghost{ background: transparent; }
 
-/* Summary */
+/* ===========================
+   Summary
+   =========================== */
 .pad{ padding: 18px; }
 
 .summary{
@@ -465,17 +486,19 @@ body{
   font-weight: 800;
 }
 
-.summary__v{
-  font-weight: 900;
-}
+.summary__v{ font-weight: 800; }
 
-/* Responsive */
+/* ===========================
+   Responsive
+   =========================== */
 @media (max-width: 900px){
   .hero{ grid-template-columns: 1fr; }
   .grid{ grid-template-columns: 1fr; }
 }
 
-/* Range (Sobha gold + S pointer) */
+/* ===========================
+   Range (Gold track + Sobha pointer thumb)
+   =========================== */
 input[type="range"]{
   width:100%;
   margin: 8px 0 6px;
@@ -487,7 +510,7 @@ input[type="range"]{
   outline:none;
 }
 
-/* PATCH: ensure the track is on-brand (kills default blue bars) */
+/* Track (kills default blue bars) */
 input[type="range"]::-webkit-slider-runnable-track{
   height: 8px;
   border-radius: 999px;
@@ -500,6 +523,7 @@ input[type="range"]::-moz-range-track{
   border: none;
 }
 
+/* Thumb */
 input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance:none;
   appearance:none;
@@ -514,8 +538,8 @@ input[type="range"]::-webkit-slider-thumb{
   background-size: 18px 18px;
   box-shadow: 0 10px 30px rgba(0,0,0,.35);
   cursor:pointer;
+  margin-top: -13px; /* centers thumb on 8px track */
 }
-
 input[type="range"]::-moz-range-thumb{
   width: 34px;
   height: 34px;
@@ -530,7 +554,9 @@ input[type="range"]::-moz-range-thumb{
   cursor:pointer;
 }
 
-/* Photo (Step 6 only) */
+/* ===========================
+   Photo (Step 6 only)
+   =========================== */
 .photo-help{
   margin-top: 8px;
   font-size: 12px;
