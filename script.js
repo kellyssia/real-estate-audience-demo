@@ -3,12 +3,50 @@
 ---------------------------- */
 const WS_URL = "wss://real-estate-live-demo.onrender.com/ws";
 
-// Audience identity + upload endpoint + session id
+// Audience identity + upload endpoint
 const AUDIENCE_SITE_URL = "https://real-estate-audience.onrender.com";
 const UPLOAD_URL = "https://real-estate-live-demo.onrender.com/upload";
-const SESSION_ID =
-  (window.crypto && crypto.randomUUID) ? crypto.randomUUID() :
-  ("sess_" + Math.random().toString(16).slice(2) + Date.now());
+
+/* ============================================================
+   STABLE IDENTITY - CRITICAL FIX
+   ============================================================
+   
+   deviceId: Persists across browser sessions (localStorage)
+             - Same user = same deviceId even after closing browser
+             - Used as the PRIMARY key for visitor tracking
+   
+   sessionId: Persists within browser session (sessionStorage)
+              - Same tab session = same sessionId
+              - New tab or browser restart = new sessionId
+              - Used to detect "returning visits" within same device
+   
+   BOTH are sent with every event so the Mission Control LWC
+   can track visitors correctly and migrate from sessionId to deviceId.
+   ============================================================ */
+
+// DEVICE ID - persists forever in localStorage
+let DEVICE_ID = localStorage.getItem("sobha_deviceId");
+if (!DEVICE_ID) {
+  DEVICE_ID = (window.crypto && crypto.randomUUID) 
+    ? crypto.randomUUID() 
+    : ("dev_" + Math.random().toString(16).slice(2) + Date.now());
+  localStorage.setItem("sobha_deviceId", DEVICE_ID);
+  console.log("[Identity] Created new deviceId:", DEVICE_ID);
+} else {
+  console.log("[Identity] Using existing deviceId:", DEVICE_ID);
+}
+
+// SESSION ID - persists for browser session in sessionStorage
+let SESSION_ID = sessionStorage.getItem("sobha_sessionId");
+if (!SESSION_ID) {
+  SESSION_ID = (window.crypto && crypto.randomUUID) 
+    ? crypto.randomUUID() 
+    : ("sess_" + Math.random().toString(16).slice(2) + Date.now());
+  sessionStorage.setItem("sobha_sessionId", SESSION_ID);
+  console.log("[Identity] Created new sessionId:", SESSION_ID);
+} else {
+  console.log("[Identity] Using existing sessionId:", SESSION_ID);
+}
 
 let ws;
 let presenceTimer;
@@ -65,6 +103,9 @@ function getActiveStep(){
   return active ? Number(active.getAttribute("data-step")) : 1;
 }
 
+/* ============================================================
+   SEND EVENT - Now includes BOTH deviceId AND sessionId
+   ============================================================ */
 function sendEvent(eventType, payload = {}){
   const msg = {
     type: "event",
@@ -72,7 +113,8 @@ function sendEvent(eventType, payload = {}){
     ts: new Date().toISOString(),
     page: getActiveStep(),
     siteUrl: AUDIENCE_SITE_URL,
-    sessionId: SESSION_ID,
+    deviceId: DEVICE_ID,      // CRITICAL: Always include deviceId
+    sessionId: SESSION_ID,    // CRITICAL: Always include sessionId
     pageUrl: window.location.href,
     ...payload
   };
@@ -80,9 +122,34 @@ function sendEvent(eventType, payload = {}){
   try{
     if (ws && ws.readyState === WebSocket.OPEN){
       ws.send(JSON.stringify(msg));
+      console.log("[WS] Sent:", eventType, msg);
     }
-  }catch(e){}
+  }catch(e){
+    console.error("[WS] Send error:", e);
+  }
 }
+
+/* ============================================================
+   Send disconnect event when user leaves the page
+   ============================================================ */
+window.addEventListener("beforeunload", () => {
+  // Try to send disconnect event (may not always succeed)
+  try {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const msg = {
+        type: "event",
+        eventType: "disconnect",
+        ts: new Date().toISOString(),
+        deviceId: DEVICE_ID,
+        sessionId: SESSION_ID,
+        siteUrl: AUDIENCE_SITE_URL
+      };
+      ws.send(JSON.stringify(msg));
+    }
+  } catch(e) {
+    // Ignore errors during unload
+  }
+});
 
 /* ---------------------------
    Wizard core
@@ -155,6 +222,7 @@ if (consentCheck && btnConsentContinue){
 
 /* ---------------------------
    Step 2: Location (click-to-advance)
+   FIXED: field is now "location" consistently
 ---------------------------- */
 document.querySelectorAll('.tile[data-type="location"]').forEach(tile => {
   tile.addEventListener("click", () => {
@@ -164,8 +232,14 @@ document.querySelectorAll('.tile[data-type="location"]').forEach(tile => {
     state.location = tile.getAttribute("data-value") || null;
     state.locationImage = tile.getAttribute("data-image") || null;
 
-    // send both generic + specific (monitor compatibility)
-    sendEvent("selection", { field: "location", value: state.location, image: state.locationImage });
+    // Send selection event with correct field name for LWC
+    sendEvent("selection", { 
+      field: "location",  // LWC expects "location"
+      value: state.location, 
+      image: state.locationImage 
+    });
+    
+    // Also send legacy event for backward compatibility
     sendEvent("select_location", { location: state.location, image: state.locationImage });
 
     nextStep(); // -> Step 3
@@ -258,6 +332,7 @@ if (btnBedroomsNext){
 
 /* ---------------------------
    Step 5: Property Type (click-to-advance)
+   FIXED: field is now "type" consistently (LWC expects "type")
 ---------------------------- */
 document.querySelectorAll('.tile[data-type="propertyType"]').forEach(tile => {
   tile.addEventListener("click", () => {
@@ -267,7 +342,14 @@ document.querySelectorAll('.tile[data-type="propertyType"]').forEach(tile => {
     state.propertyType = tile.getAttribute("data-value") || null;
     state.propertyTypeImage = tile.getAttribute("data-image") || null;
 
-    sendEvent("selection", { field: "propertyType", value: state.propertyType, image: state.propertyTypeImage });
+    // Send selection event with correct field name for LWC
+    sendEvent("selection", { 
+      field: "type",  // LWC expects "type" not "propertyType"
+      value: state.propertyType, 
+      image: state.propertyTypeImage 
+    });
+    
+    // Also send legacy event for backward compatibility
     sendEvent("select_property_type", { propertyType: state.propertyType, image: state.propertyTypeImage });
 
     nextStep(); // -> Step 6
@@ -315,6 +397,7 @@ async function uploadPhotoIfNeeded(){
   const form = new FormData();
   form.append("photo", selectedPhotoFile);
   form.append("sessionId", SESSION_ID);
+  form.append("deviceId", DEVICE_ID);
 
   const res = await fetch(UPLOAD_URL, { method: "POST", body: form });
   if (!res.ok) throw new Error(`Upload failed: ${res.status}`);
@@ -326,11 +409,19 @@ async function uploadPhotoIfNeeded(){
   return uploadedPhotoUrl;
 }
 
+/* ============================================================
+   REGISTER EVENT - Parse name into firstName/lastName
+   ============================================================ */
 if (btnRegister){
   btnRegister.addEventListener("click", async () => {
     const fullName = fullNameEl ? fullNameEl.value.trim() : "";
     const email = emailEl ? emailEl.value.trim() : "";
     const phone = phoneEl ? phoneEl.value.trim() : "";
+
+    // Parse fullName into firstName and lastName
+    const nameParts = fullName.split(/\s+/);
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.slice(1).join(" ") || "";
 
     btnRegister.disabled = true;
     const originalText = btnRegister.textContent;
@@ -348,11 +439,15 @@ if (btnRegister){
       btnRegister.textContent = originalText;
     }
 
+    // Send register event with parsed name fields for LWC
     sendEvent("register", {
       fullName,
+      firstName,        // LWC expects firstName
+      lastName,         // LWC expects lastName
       email,
       phone,
       photoUrl,
+      photo: photoUrl,  // Alias for LWC compatibility
       selections: {
         location: state.location,
         locationImage: state.locationImage,
@@ -438,3 +533,7 @@ if (btnRestart){
 ---------------------------- */
 connectWS();
 showStep(1);
+
+// Log identity info for debugging
+console.log("[Identity] Device ID:", DEVICE_ID);
+console.log("[Identity] Session ID:", SESSION_ID);
